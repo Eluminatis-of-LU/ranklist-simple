@@ -1,1 +1,1 @@
-pm2 start index.js --watch --max-memory-restart 150M --name ranklist-simple --time 
+pm2 start index.js --watch --cron 0 */6 * * * --name ranklist-simple --time 
