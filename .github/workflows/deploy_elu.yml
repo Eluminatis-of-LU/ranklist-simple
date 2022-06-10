@@ -1,0 +1,66 @@
+name: deploy-elu
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+jobs:
+  deploy_elu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+          fetch-depth: 0
+      - name: Notify build start
+        uses: fjogeleit/http-request-action@master
+        with:
+          url: ${{ secrets.NOTIFY_WEBHOOK }}
+          method: 'POST'
+          data: '{ "content": "build started ${{ github.event.repository.name }}" }'
+      - name: Restore deps and build
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          cache: 'npm'
+      - run: npm install
+      - name: Find my ip
+        id: findIp
+        uses: fjogeleit/http-request-action@master
+        with:
+          url: ${{ secrets.FIND_IP_URL }}
+          method: 'GET'
+          username: ${{ secrets.FIND_IP_USER }}
+          password: ${{ secrets.FIND_IP_PASSWORD }}
+      - name: Print ip
+        run: echo ${{ fromJson(steps.findIp.outputs.response).ip }}
+      - name: copy file via ssh key
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ fromJson(steps.findIp.outputs.response).ip }}
+          username: ${{ secrets.DEPLOY_USERNAME }}
+          port: ${{ secrets.DEPLOY_PORT }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          source: "./"
+          target: ${{ github.event.repository.name }}
+      - name: Notify build success
+        if: ${{ success() }}
+        uses: fjogeleit/http-request-action@master
+        with:
+          url: ${{ secrets.NOTIFY_WEBHOOK }}
+          method: 'POST'
+          data: '{ "content": "build success ${{ github.event.repository.name }}" }'
+      - name: Notify build failure
+        if: ${{ failure() }}
+        uses: fjogeleit/http-request-action@master
+        with:
+          url: ${{ secrets.NOTIFY_WEBHOOK }}
+          method: 'POST'
+          data: '{ "content": "build failed ${{ github.event.repository.name }}" }'
+      # - name: Purge cache
+      #   if: ${{ success() }}
+      #   uses: jakejarvis/cloudflare-purge-action@master
+      #   env:
+      #     CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_ZONE }}
+      #     CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}

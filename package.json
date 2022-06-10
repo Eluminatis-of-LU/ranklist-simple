@@ -1,0 +1,28 @@
+{
+  "name": "ranklist-simple",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Eluminatis-of-LU/ranklist-simple.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Eluminatis-of-LU/ranklist-simple/issues"
+  },
+  "homepage": "https://github.com/Eluminatis-of-LU/ranklist-simple#readme",
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "ejs": "^3.1.8",
+    "fs-extra": "^10.1.0",
+    "needle": "^3.1.0",
+    "node-cron": "^3.0.1",
+    "uuid": "^8.3.2",
+    "winston": "^3.7.2"
+  }
+}
