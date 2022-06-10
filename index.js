@@ -8,6 +8,6 @@ const cron = require('node-cron');
     await processCsv();
 })();
 
-// cron.schedule('0 */6 * * *', async () => {
-//     await processCsv();
-// });
+cron.schedule('0 */6 * * *', async () => {
+    await processCsv();
+});
