@@ -75,6 +75,8 @@ async function Process() {
         file.toString().split('\n').forEach(line => {
             rows.push(line.split(',').map(el => el.trim()));
         });
+
+        logger.info('rows', rows);
         
         for (let i = 1; i < rows.length; i++) {
             await UpdateRow(rows[i]);
