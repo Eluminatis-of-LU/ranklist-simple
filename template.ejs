@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+        <title>Ranklist</title>
+        <style>
+			.link-to-profile:link { text-decoration: none;}
+			.cf-newbie { color: gray;}
+			.cf-pupil { color: green;}
+			.cf-specialist { color: #03A89E;}
+			.cf-expert { color: blue;}
+			.cf-candidate-master { color: #a0a;}
+			.cf-master { color: #FF8C00;}
+			.cf-international-master { color: #FF8C00;}
+			.cf-grandmaster { color: red;}
+			.cf-internation-grandmaster { color: red;}
+			.cf-legendary-grandmaster::first-letter { color: black;}
+			.cf-legendary-grandmaster { color: red;}
+			.cc-1star { color: gray;}
+			.cc-2star { color: green;}
+			.cc-3star { color: blue;}
+			.cc-4star { color: #684273;}
+			.cc-5star { color: yellow;}
+			.cc-6star { color: orange;}
+			.cc-7star { color: red;}
+		</style>
+        <script>
+        </script>
+    </head>
+    <body>
+        <main class="container">
+            <table>
+                <thead>
+                    <tr>
+                        <% for (let i = 0; i < columns.length; i++) { %>
+                        <th><%= columns[i] %></th>
+                        <% } %>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (let i = 0; i < rows.length; i++) { %>
+                    <tr>
+                        <td><%= rows[i].Rank %></td>
+                        <td><%= rows[i].Name %></td>
+                        <td><%= rows[i].Id %></td>
+                        <td><a class="<%= rows[i].CodeForces.Rank %>" href="http://codeforces.com/profile/<%= rows[i].CodeForces.Handle %>" ><%= rows[i].CodeForces.Handle %></a></td>
+                        <td><a class="<%= rows[i].CodeChef.Rank %>" href="https://www.codechef.com/users/<%= rows[i].CodeChef.Handle %>" ><%= rows[i].CodeChef.Handle %></a></td>
+                        <td><%= rows[i].Rating %></td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </main>
+    </body>
+</html>

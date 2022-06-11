@@ -25,6 +25,20 @@ async function GetRating(userName) {
     }
 }
 
+function GetRank(rating) {
+    if( !rating || rating < 1200 ) return 'cf-newbie';
+    else if( rating < 1400 ) return 'cf-pupil';
+    else if( rating < 1600 ) return 'cf-specialist';
+    else if( rating < 1900 ) return 'cf-expert';
+    else if( rating < 2100 ) return 'cf-candidate-master';
+    else if( rating < 2300 ) return 'cf-master';
+    else if( rating < 2400 ) return 'cf-international-master';
+    else if( rating < 2600 ) return 'cf-grandmaster';
+    else if( rating < 3000 ) return 'cf-internation-grandmaster';
+    else return 'cf-legendary-grandmaster';
+}
+
 module.exports = {
     GetRating,
+    GetRank,
 }

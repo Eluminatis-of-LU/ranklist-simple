@@ -27,72 +27,62 @@ async function UpdateRow(row) {
     row[6] = row[6].toFixed(2);
 }
     
-function WriteCsv(file, data) {
-    fs.writeFile(file, data.map(row => row.join(',')).join('\n'), 'utf-8', err => err ? logger.error(err) : 0);
+function WriteCsvSync(file, data) {
+    fse.outputFileSync(file, data.map(row => row.join(',')).join('\n'), 'utf-8');
 }
 
-function CreateHtml(rows) {
+function CreateHtmlSync(rows) {
     const columns = ['Rank', 'Name', 'Id', 'CodeForces', 'CodeChef', 'Rating'];
     const rankList = [];
     for (let i = 1; i < rows.length; i++) {
-        rankList.push([0, rows[i][0], rows[i][1], rows[i][2], rows[i][3], rows[i][6]]);
+        rankList.push({
+            Rank: 0,
+            Name: rows[i][0],
+            Id: rows[i][1],
+            CodeForces: {
+                Handle: rows[i][2],
+                Rank: codeforces.GetRank(rows[i][4]),
+            },
+            CodeChef: {
+                Handle: rows[i][3],
+                Rank: codechef.GetRank(rows[i][5]),
+            },
+            Rating: rows[i][6],
+        });
     }
     ranklist = rankList.sort((a, b) => Math.sign(b[5] - a[5]));
     rankList.map((row, ind, array) => {
-        console.log(row);
+        logger.info(row);
         if (ind == 0) array[ind][0] = ind + 1;
         else if (array[ind][5] !== array[ind - 1][5]) array[ind][0] = ind + 1;
         else array[ind][0] = array[ind - 1][0];
         return array[ind];
     })
-    console.log(rankList);
-    const html = ejs.render(
-`<table>
-    <thead>
-        <tr>
-            <% for (let i = 0; i < columns.length; i++) { %>
-            <th><%= columns[i] %></th>
-            <% } %>
-        </tr>
-    </thead>
-    <thead>
-        <% for (let i = 0; i < rows.length; i++) { %>
-        <tr>
-            <% for (let j = 0; j < rows[i].length; j++) { %>
-                <td><%= rows[i][j] %></td>
-            <% } %>
-        </tr>
-        <% } %>
-    </thead>
-</table>
-`, {
+    logger.info(rankList);
+    const template = fs.readFileSync('./template.ejs').toString();
+    const html = ejs.render(template, {
         columns: columns,
         rows: rankList,
     });
-    fse.outputFile(process.env.DIST, html, 'utf-8', err => err ? logger.error(err) : 0);
+    fse.outputFileSync(process.env.DIST, html, 'utf-8');
 }
 
 async function Process() {
     const file = fs.readFileSync(fileName);
     try {
         const rows = [];
-        const lineReader = require('readline').createInterface({
-            input: require('fs').createReadStream(fileName)
-        });
         
-        lineReader.on('line', function (line) {
+        file.toString().split('\n').forEach(line => {
             rows.push(line.split(',').map(el => el.trim()));
         });
-
-        lineReader.on('close', async function() {
-            for (let i = 1; i < rows.length; i++) {
-                await UpdateRow(rows[i]);
-            }
-            WriteCsv(fileName, rows);
-            CreateHtml(rows);
-        });
+        
+        for (let i = 1; i < rows.length; i++) {
+            await UpdateRow(rows[i]);
+        }
+        WriteCsvSync(fileName, rows);
+        CreateHtmlSync(rows);
     } catch (err) {
-        logger.error(err);
+        logger.error(err.message);
         logger.error('Processing failed, rolling back');
         fse.outputFileSync(fileName, file);
     }
