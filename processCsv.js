@@ -32,7 +32,7 @@ function WriteCsvSync(file, data) {
 }
 
 function CreateHtmlSync(rows) {
-    const columns = ['Rank', 'Name', 'Id', 'CodeForces', 'CodeChef', 'Rating'];
+    const columns = ['Rank', 'Id', 'Name', 'CodeForces', 'CodeChef', 'Rating'];
     const rankList = [];
     for (let i = 1; i < rows.length; i++) {
         rankList.push({
@@ -50,12 +50,12 @@ function CreateHtmlSync(rows) {
             Rating: rows[i][6],
         });
     }
-    ranklist = rankList.sort((a, b) => Math.sign(b[5] - a[5]));
+    rankList.sort((a, b) => Math.sign(b.Rating - a.Rating));
     rankList.map((row, ind, array) => {
         logger.info(row);
-        if (ind == 0) array[ind][0] = ind + 1;
-        else if (array[ind][5] !== array[ind - 1][5]) array[ind][0] = ind + 1;
-        else array[ind][0] = array[ind - 1][0];
+        if (ind == 0) array[ind].Rank = ind + 1;
+        else if (array[ind].Rating !== array[ind - 1].Rating) array[ind].Rank = ind + 1;
+        else array[ind].Rank = array[ind - 1].Rank;
         return array[ind];
     })
     logger.info(rankList);
