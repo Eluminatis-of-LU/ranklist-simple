@@ -9,3 +9,5 @@ DIST=
 PORT=
 CRON=
 ```
+
+[https://ranklist.eluminatis-of-lu.com/](https://ranklist.eluminatis-of-lu.com/)
