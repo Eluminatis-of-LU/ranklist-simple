@@ -1,4 +1,11 @@
 # ranklist-simple
 
 .env
-DATA_FILE
+```
+DATA_FILE=s
+CF_FACTOR=
+CC_FACTOR=
+DIST=
+PORT=
+CRON=
+```
