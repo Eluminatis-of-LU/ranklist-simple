@@ -72,7 +72,7 @@ async function Process() {
     try {
         const rows = [];
         
-        file.toString().split('\n').forEach(line => {
+        file.toString().split('\n').map(el => el.trim()).filter(Boolean).forEach(line => {
             rows.push(line.split(',').map(el => el.trim()));
         });
 
