@@ -29,11 +29,13 @@
         <script>
         </script>
     </head>
-    <body>
-        <main class="container">
-            <h2>LU Coder's Ranklist</h2> 
-            <span>Last Updated: <%= (new Date()).toLocaleString('bn-BD', {timeZone: 'Asia/Dhaka'}) %></span> <br> <br>
-            <table>
+    <body class="container">
+        <main class="container-fluid">
+            <hgroup>
+                <h2>LU Coder's Ranklist</h2>
+                <h3>Last Updated: <%= (new Date()).toLocaleString('bn-BD', {timeZone: 'Asia/Dhaka'}) %></h3>
+              </hgroup>
+            <table role="grid">
                 <thead>
                     <tr>
                         <% for (let i = 0; i < columns.length; i++) { %>
