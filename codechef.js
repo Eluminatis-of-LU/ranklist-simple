@@ -1,6 +1,6 @@
 const needle = require('needle');
 const logger = require('./logger');
-const ccUrl = 'https://codechef-api.eluminatis-of-lu.com/rating/';
+const ccUrl = process.env.CC_API_URL;
 
 async function GetRating(userName) {
     try {

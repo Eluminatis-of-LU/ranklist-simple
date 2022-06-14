@@ -1,6 +1,6 @@
 const needle = require('needle');
 const logger = require('./logger');
-const cfUrl = 'http://codeforces.com/api/user.rating?handle=';
+const cfUrl = process.env.CF_API_URL;
 
 async function GetRating(userName) {
     try {
