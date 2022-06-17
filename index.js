@@ -17,10 +17,6 @@ app.get('/ping', (req, res) => {
 
 app.listen(port, () => logger.info(`ranklist-simple listening on port ${port}!`));
 
-(async () => {
-    await processCsv();
-})();
-
 cron.schedule(process.env.CRON, async () => {
     logger.info('starting scheduled job for processing csv');
     await processCsv();
